@@ -1,0 +1,2 @@
+debian/bin/InCoind usr/bin
+src/InCoind usr/lib/InCoin

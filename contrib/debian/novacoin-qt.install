@@ -1,0 +1,5 @@
+InCoin-qt usr/bin
+share/pixmaps/InCoin32.xpm usr/share/pixmaps
+share/pixmaps/InCoin80.xpm usr/share/pixmaps
+debian/InCoin-qt.desktop usr/share/applications
+debian/InCoin-qt.protocol usr/share/kde4/services/

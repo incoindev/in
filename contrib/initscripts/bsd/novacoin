@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: InCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# InCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable InCoin service.
+# InCoin_config (path): Set to /usr/local/etc/InCoin.conf by default.
+# InCoin_user:  The user account InCoin daemon runs as. It uses 'root' user by default.
+# InCoin_group: The group account InCoin daemon runs as. It uses 'wheel' group by default.
+# InCoin_datadir (str): Default to "/var/db/InCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=InCoin
+rcvar=InCoin_enable
+
+: ${InCoin_enable:=NO}
+: ${InCoin_config=/usr/local/etc/InCoin.conf}
+: ${InCoin_datadir=/var/db/InCoin}
+: ${InCoin_user="root"}
+: ${InCoin_group="wheel"}
+
+required_files=${InCoin_config}
+command=/usr/local/bin/InCoind
+InCoin_chdir=${InCoin_datadir}
+pidfile="${InCoin_datadir}/InCoind.pid"
+stop_cmd=InCoin_stop
+command_args="-conf=${InCoin_config} -datadir=${InCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+InCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${InCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${InCoin_user}:${InCoin_group} ${InCoin_datadir}
+}
+
+InCoin_prestart()
+{
+	if [ ! -d "${InCoin_datadir}/." ]; then
+		InCoin_create_datadir || return 1
+	fi
+}
+
+InCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+InCoin_stop()
+{
+    InCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${InCoin_config} -datadir=${InCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

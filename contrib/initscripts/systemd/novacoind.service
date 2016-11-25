@@ -1,0 +1,11 @@
+[Unit]
+Description=InCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=InCoin
+ExecStart=/opt/InCoin/InCoind
+
+[Install]
+WantedBy=multi-user.target

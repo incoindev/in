@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=InCoin
+Comment=InCoin P2P Cryptocurrency
+Comment[ru]=InCoin, P2P криптовалюта
+Comment[fr]=InCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=InCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/InCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/InCoin80.xpm
+MimeType=x-scheme-handler/InCoin;
+Categories=Office;
